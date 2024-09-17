@@ -16,7 +16,7 @@ const Header = () => {
   const navigate = useNavigate();
   const user = true;
   return (
-    <div className="flex justify-between pt-2">
+    <div className="flex justify-between pt-2 sticky">
       <Link to={"/"}>
         <h1 className="text-2xl font-bold">SHORTIFY.</h1>
       </Link>
@@ -32,8 +32,10 @@ const Header = () => {
             <DropdownMenuContent>
               <DropdownMenuLabel>Keshav Sharma</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>My Links</DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600">
+              <DropdownMenuItem className="cursor-pointer">
+                My Links
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600 cursor-pointer">
                 <LogOut />
                 <span className="ml-2">Logout</span>
               </DropdownMenuItem>
