@@ -6,17 +6,34 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const [url, setUrl] = useState();
+  const navigate = useNavigate();
+
+  const handleShortenUrl = (e) => {
+    e.preventDefault();
+    if (url) {
+      navigate(`/auth?newUrl=${url}`);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center">
       <h2 className="text-3xl sm:text-5xl font-bold text-center pt-16 sm:pt-24">
         Transform Your Links: Shorter, Smarter, Simpler
       </h2>
-      <form className="flex flex-col md:flex-row w-full gap-2 md:w-2/4 my-10">
+      <form
+        onSubmit={handleShortenUrl}
+        className="flex flex-col md:flex-row w-full gap-2 md:w-2/4 my-10"
+      >
         <Input
           placeholder="Enter your link here"
           type="url"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
           className="focus:outline-none"
         />
         <Button className="" type="submit">
