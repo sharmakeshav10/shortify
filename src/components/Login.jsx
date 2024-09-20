@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -12,6 +12,9 @@ import { Button } from "./ui/button";
 import { DotLoader } from "react-spinners";
 import Error from "./Error";
 import * as Yup from "yup";
+import useFetch from "@/hooks/useFetch";
+import { login } from "@/db/apiAuth";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Login = () => {
   const [errors, setErrors] = useState({});
@@ -19,6 +22,19 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const urlLink = searchParams.get("newUrl");
+
+  const { data, error, loading, fn: loginFn } = useFetch(login, formData);
+
+  useEffect(() => {
+    console.log("DATA", data);
+    if (data && error === null) {
+      navigate(`/dashboard?${urlLink ? `newUrl=${urlLink}` : ""}`);
+    }
+  }, [data, error]);
 
   const handleInputChange = (e) => {
     console.log("res", e.target.name, e.target.value);
@@ -42,6 +58,8 @@ const Login = () => {
       });
 
       await schema.validate(formData, { abortEarly: false });
+      //login api call
+      await loginFn();
     } catch (e) {
       const formErrors = {};
 
@@ -59,7 +77,7 @@ const Login = () => {
         <CardHeader>
           <CardTitle>Login</CardTitle>
           <CardDescription>Enter with your login credentials</CardDescription>
-          <Error message={"invald"} />
+          {error && <Error message={error.message} />}
         </CardHeader>
         <CardContent className="space-y-2">
           <div className="space-y-1">
@@ -86,7 +104,7 @@ const Login = () => {
         <CardFooter>
           <div className="justify-center">
             <Button onClick={handleLoginSubmit}>
-              {true ? <DotLoader size={25} color="#FFFFFF" /> : "Login"}
+              {loading ? <DotLoader size={25} color="#FFFFFF" /> : "Login"}
             </Button>
           </div>
         </CardFooter>
