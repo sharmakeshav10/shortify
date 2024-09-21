@@ -47,3 +47,17 @@ export const signup = async ({ name, email, password, profile_pic }) => {
 
   return data;
 };
+
+export const getCurrentUser = async () => {
+  const { data, error } = await supabase.auth.getSession();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  if (data.session === null) {
+    throw new Error(error.message);
+  }
+
+  return data?.session?.user;
+};
