@@ -13,7 +13,7 @@ import { DotLoader } from "react-spinners";
 import Error from "./Error";
 import * as Yup from "yup";
 import useFetch from "@/hooks/useFetch";
-import { login } from "@/db/apiAuth";
+import { login, signup } from "@/db/apiAuth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Login = () => {
