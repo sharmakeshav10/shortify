@@ -15,6 +15,7 @@ import * as Yup from "yup";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Error from "./Error";
 import { DotLoader } from "react-spinners";
+import { UserState } from "@/context";
 
 const Signup = () => {
   const [errors, setErrors] = useState([]);
@@ -30,19 +31,20 @@ const Signup = () => {
   const urlLink = searchParams.get("newUrl");
 
   const { data, error, loading, fn: signupFn } = useFetch(signup, formData);
+  const { fetchUser } = UserState();
 
   useEffect(() => {
-    if (data && error == null) {
+    if (data && error === null) {
+      console.log("DATA SINGUPPP", data);
       navigate(`/dashboard?${urlLink ? `newUrl=${urlLink}` : ""}`);
+      fetchUser();
     }
   }, [data, error]);
 
   const handleInputChange = (e) => {
-    console.log("SINGUPPP", e.target.name, e.target.value);
-
     const { name, value, files } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prevState) => ({
+      ...prevState,
       [name]: files ? files[0] : value,
     }));
   };
@@ -52,18 +54,23 @@ const Signup = () => {
     try {
       const schema = Yup.object().shape({
         name: Yup.string().required("Name is required"),
-        email: Yup.string("Invalid Email").required("Email is required"),
-        password: Yup.string("Invalid password")
-          .required("Password is required")
-          .min(6, "Password must be at least 6 characters"),
+        email: Yup.string()
+          .email("Invalid Email")
+          .required("Email is required"),
+        password: Yup.string()
+          .min(6, "Password must be at least 6 characters")
+          .required("Password is required"),
         profile_pic: Yup.mixed().required("Profile pic is required"),
       });
 
       //input validation
       await schema.validate(formData, { abortEarly: false });
 
+      console.log("Signup Data:", formData);
+
       //api call
       await signupFn();
+      console.log("Signup Data after call:", formData);
     } catch (e) {
       const formErrors = {};
       e?.inner?.forEach((error) => {

@@ -22,10 +22,8 @@ export const signup = async ({ name, email, password, profile_pic }) => {
     .from("profile_pic")
     .upload(fileName, profile_pic);
 
-  console.log("SIGNUPPP", res);
-
   if (picError) {
-    throw new Error(error.message);
+    throw new Error(picError.message);
   }
 
   //signup logic
@@ -41,6 +39,8 @@ export const signup = async ({ name, email, password, profile_pic }) => {
     },
   });
 
+  console.log("SIGNUPPPP", data.user);
+
   if (error) {
     throw new Error(error.message);
   }
@@ -55,8 +55,8 @@ export const getCurrentUser = async () => {
     throw new Error(error.message);
   }
 
-  if (data.session === null) {
-    throw new Error(error.message);
+  if (!data.session) {
+    return null;
   }
 
   return data?.session?.user;

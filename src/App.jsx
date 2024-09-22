@@ -6,6 +6,8 @@ import DashboardPage from "./pages/DashboardPage";
 import LinkPage from "./pages/LinkPage";
 import AuthPage from "./pages/AuthPage";
 import RedirectLinkPage from "./pages/RedirectLinkPage";
+import UserProvider from "./context";
+import RequireAuth from "./components/RequireAuth";
 
 const router = createBrowserRouter([
   {
@@ -17,11 +19,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <DashboardPage />,
+        element: (
+          <RequireAuth>
+            <DashboardPage />,
+          </RequireAuth>
+        ),
       },
       {
         path: "/link/:id",
-        element: <LinkPage />,
+        element: (
+          <RequireAuth>
+            <LinkPage />
+          </RequireAuth>
+        ),
       },
       {
         path: "/auth",
@@ -38,7 +48,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <div className="min-h-screen">
-      <RouterProvider router={router} />;
+      <UserProvider>
+        <RouterProvider router={router} />;
+      </UserProvider>
     </div>
   );
 }

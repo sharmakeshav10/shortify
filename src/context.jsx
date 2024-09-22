@@ -4,8 +4,8 @@ import { getCurrentUser } from "./db/apiAuth";
 
 const UserContext = createContext();
 
-const UserProvider = () => {
-  const { data, loading, error, fn: fetchUser } = useFetch(getCurrentUser);
+const UserProvider = ({ children }) => {
+  const { data, loading, fn: fetchUser } = useFetch(getCurrentUser);
 
   const isAuthenticated = data?.role === "authenticated";
 
@@ -14,7 +14,7 @@ const UserProvider = () => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ data, loading, error, isAuthenticated }}>
+    <UserContext.Provider value={{ data, loading, fetchUser, isAuthenticated }}>
       {children}
     </UserContext.Provider>
   );

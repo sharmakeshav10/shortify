@@ -13,8 +13,9 @@ import { DotLoader } from "react-spinners";
 import Error from "./Error";
 import * as Yup from "yup";
 import useFetch from "@/hooks/useFetch";
-import { login, signup } from "@/db/apiAuth";
+import { login } from "@/db/apiAuth";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { UserState } from "@/context";
 
 const Login = () => {
   const [errors, setErrors] = useState({});
@@ -28,11 +29,13 @@ const Login = () => {
   const urlLink = searchParams.get("newUrl");
 
   const { data, error, loading, fn: loginFn } = useFetch(login, formData);
+  const { fetchUser } = UserState();
 
   useEffect(() => {
     console.log("DATA", data);
     if (data && error === null) {
       navigate(`/dashboard?${urlLink ? `newUrl=${urlLink}` : ""}`);
+      fetchUser();
     }
   }, [data, error]);
 
