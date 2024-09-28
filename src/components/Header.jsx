@@ -56,9 +56,12 @@ const Header = () => {
                   {data?.user_metadata?.name}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
-                  My Links
-                </DropdownMenuItem>
+                <Link to={"/dashboard"}>
+                  <DropdownMenuItem className="cursor-pointer">
+                    My Links
+                  </DropdownMenuItem>
+                </Link>
+
                 <DropdownMenuItem
                   className="text-red-600 cursor-pointer"
                   onClick={handleLogout}
